@@ -1,0 +1,7 @@
+
+
+primes = [2]
+
+count = 3
+
+while count < 200
