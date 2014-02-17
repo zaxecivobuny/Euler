@@ -2,6 +2,9 @@
 # U R2 F B R B2 R U2 L B2 R U' D' R2 F R' L B2 U2 F2
 
 def intify(s):
+	
+	# converts face cards to number values
+	
 	if s == "A":
 		return 14
 	elif s == "K":
@@ -16,6 +19,9 @@ def intify(s):
 		return int(s)
 
 def sort_hand(A):
+	
+	# sorts the hand by card value, lowest first
+	
 	temphand = []
 	while len(temphand) < 5:
 		least = 100
@@ -26,17 +32,27 @@ def sort_hand(A):
 				index = i
 				least = cardnumber
 		temphand.append(A.pop(index))
-	return temphand
+#	print temphand
+	return temphand[:]
 
 def countplaces(A):
+#	print "A at start of countplaces", A
+	# returns a count of how many 2s, 3s, etc. (useful for determining pairs, full house, etc)
+
 	places = []
 	for i in xrange(15):
 		places.append(0)
 	for i in xrange(5):
+#		print "A", A
+#		print "i", i
+
 		places[intify(A[i][0])] += 1
 	return places
 
 def highesttwopair(A,B):
+
+	# compares two hands with two pair, returns 1 if first hand wins, 0 if second does.
+
 	Aplaces = countplaces(A)
 	Bplaces = countplaces(B)
 	for i in range(len(Aplaces) - 1 ,0,-1):
@@ -44,16 +60,15 @@ def highesttwopair(A,B):
 			return 1
 		if Bplaces[i] == 2 and not Aplaces[i] == 2:
 			return 0
-	if highcard(A)>highcard(B):
-		return 1
+	return highcardshowdown(A,B)
 
 def highestofakind(A,B,n):
 	Aplaces = countplaces(A)
 	Bplaces = countplaces(B)
-	for i in range(len(places)):
+	for i in range(len(Aplaces)):
 		if Aplaces[i] == n:
 			Akind = i
-		if Bplaces[i] == n
+		if Bplaces[i] == n:
 			Bkind = i
 	if Akind > Bkind:
 		return 1
@@ -66,25 +81,45 @@ def highcard(A):
 	places = countplaces(A)
 	return intify(A[-1][0])
 
+def highcardshowdown(A,B):
+#	print "A at start of highcardshowdown", A
+	Aplaces = countplaces(A)
+	Bplaces = countplaces(B)
+	for i in range(len(Aplaces)-1,0,-1):
+		if Aplaces[i] == 1 and not Bplaces[i] == 1:
+			return 1
+		if Bplaces[i] == 1 and not Aplaces[i] == 1:
+			return 0
+	return 0
+
 def break_tie(A,B,rank):
+#	print "A at start of break_tie", A
 	if rank in (8, 5, 4, 0):
-		if highcard(A) > highcard(B):
-			return 1
+		return highcardshowdown(A,B)
 	if rank in (6, 3):
-		if highestofakind(A,3)>highestofakind(B,3):
-			return 1
+		m = highestofakind(A,B,3)
+		if not m == -1:
+			return m
+		else:
+			return highcardshowdown(A,B)
 	if rank == 7:
 		#highest foak
 		m = highestofakind(A,B,4)
 		if not m == -1:
-				
+			return m
+		else:
+			return highcardshowdown(A,B)
 	if rank == 2:
 		#highest two pairs
 		return highesttwopair(A,B)
-	if rank == 1:
+	if rank in (1, 6):
 		#highest pair
-		if highestofakind(A,2)>highestofakind(B,2):
-			return 1
+		m = highestofakind(A,B,2)
+		print m
+		if not m == -1:
+			return m
+		else:
+			return highcardshowdown(A,B)
 	return 0
 
 
@@ -119,9 +154,12 @@ def straightflush(A):
 	return straight(A) and flush(A)
 
 def rank_hand(A):
+#	print "A at start of rank_hand", A
 	rank = 0
 	places = countplaces(A)
 	places.sort()
+	A = sort_hand(A)
+#	print "A after sort_hand", A
 	# high card = 0
 	# pair = 1
 	# two pair = 2
@@ -148,12 +186,16 @@ def rank_hand(A):
 	elif pair(A, places):
 		return 1
 	else:
+#		print "A before rank_hand ends", A
 		return 0
 
 def compare_hands(A,B):
-	x = rank_hand(A)
-	y = rank_hand(B)
-	#print x, y
+	#print "A at start of compare_hands", A
+	x = rank_hand(A[:])
+	y = rank_hand(B[:])
+	print x,y
+#	print "A after rank_hand", A
+#	print "B after rank_hand", B
 	if x == y:
 		return break_tie(A, B, x)
 	if x > y:
@@ -161,15 +203,21 @@ def compare_hands(A,B):
 	return 0
 
 
-score = 0
-f = open('c:\\LPTHW\\euler\\pokertest.txt')
-for line in f:
-	hands = line[0:-1].split(" ")
-	A = hands[0:5]
-	B = hands[5:10]
-	#print A
-	#print B
-	print compare_hands(A,B)
-	score += compare_hands(A, B)
+def main():
+	score = 0
+	f = open('poker.txt')
+	count = 1
+	for line in f:
+		line = line[0:-1]
+		hands = line[0:].split(" ")
+		A = hands[0:5]
+		B = hands[5:10]
+#		print "before the comparison, A and B are ", A, B
+		print "count", count, compare_hands(A[:], B[:])
+		score += compare_hands(A[:], B[:])
+		count += 1
 
-print score
+	f.close()
+	print score
+
+main()
