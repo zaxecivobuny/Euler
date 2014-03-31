@@ -43,7 +43,7 @@ for i in xrange(1, 1000*1000):
 	if checkpalindrome(i) and checkpalindrome(basetwo(i)):
 		dbldrome.append(i)
 
-#print dbldrome
+print dbldrome
 print len(dbldrome)
 print sum(dbldrome)
 
