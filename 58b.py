@@ -55,7 +55,7 @@ while True:
     prime_ratio = (totalprimes + 0.0) / len(diagonals_array)
     if prime_ratio < .1:
         break
-    if count % 100 == 0:
+    if count % 1000 == 0:
         print count
         print prime_ratio
 

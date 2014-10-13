@@ -10,5 +10,15 @@ def primefactor(n):
 				break
 	return factors
 	
-call = raw_input("> ")
-print primefactor(int(call))
+#call = raw_input("> ")
+#print primefactor(int(call))
+
+key = 'aaz'
+print key[:-1] + 'a'
+
+a = "thesaurus"
+
+if "the" in a:
+    print a
+
+print 0 + "a"
