@@ -28,17 +28,39 @@ def check_primeness_by_concatenation(numlist):
 
     return True
 
+# this function iterates the working list of primes to the next smallest group of size N 
+# first, it finds the lowest prime in the working list. call that A
+# second, it finds the lowest prime in the master list that is not in the working list. call that B
+# if the space between the two in master is one, we replace A with B
+# if the space is greater than two, we find the highest prime in working list that is less than B, call that C
+#   then we replace C with B, and backfill all lower positions in working list with the smallest primes in order until working list is filled up to the location of C
+
+def alt_iterate_primes_in_list(working_list):
+    print "let's do this"
+    global master_list
+    lowest_prime_index_in_master = master_list.index(working_list[0])
+    
+    for i in xrange(1,len(working_list)):
+        if not master_list[lowest_prime_index_in_master + i] in working_list:
+            next_largest_index_in_master = lowest_prime_index_in_master + i
+
+
 # iterates the working list of primes to the next version
-# check the last prime in master_list that is present in primelist
-# if all primes lower than that have been tried, then
+# there are three cases for this:
+#   in the first, the four primes in the primelist are adjacent (no holes)
+#       in this case, we increment the last position and start the remaining positions at the smallest list of primes to fill the space
+#   in the second case, a hole exists
 def iterate_primes_in_list(primelist,testflag):
     global master_list
     if testflag:
         print "primelist", primelist
+    
+
     master_list_index_of_top = master_list.index(primelist[-1])
     primesetlength = master_list_index_of_top + 1
     spaces = primesetlength - len(primelist)
     master_list_index_of_bottom = master_list.index(primelist[0])
+    
     if master_list[spaces] == primelist[0]:
         if testflag:
             print "INCREMENTING"
@@ -48,7 +70,7 @@ def iterate_primes_in_list(primelist,testflag):
 
         return primelist
     else:
-        if not 2 in primelist:
+        if not (2 in primelist :
             if testflag:
                 print "reverse increment"
             for i in xrange(len(primelist)):

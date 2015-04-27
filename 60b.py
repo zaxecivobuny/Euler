@@ -18,3 +18,8 @@ for i in get_primes(10000):
 # seedlist will be the subset of the master list that our workinglist draws from. It's max will increment in every greater cycle    
 seedlist = master_list[:listlength]
 
+for i in xrange(4):
+    if i>1:
+        break
+
+print i
