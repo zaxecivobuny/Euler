@@ -1,3 +1,5 @@
+# IGNORE ME!
+
 from useful import checkprime, get_primes
 
 # start with a set of n primes, where n is 4 in the problem example
