@@ -36,13 +36,27 @@ def check_primeness_by_concatenation(numlist):
 #   then we replace C with B, and backfill all lower positions in working list with the smallest primes in order until working list is filled up to the location of C
 
 def alt_iterate_primes_in_list(working_list):
-    print "let's do this"
+    # print "let's do this"
     global master_list
     lowest_prime_index_in_master = master_list.index(working_list[0])
+    # print "lowest_prime_index_in_master", lowest_prime_index_in_master
     
-    for i in xrange(1,len(working_list)):
+    for i in xrange(1,len(working_list)+1):
+        # print "master_list[lowest_prime_index_in_master + i]", master_list[lowest_prime_index_in_master + i]
         if not master_list[lowest_prime_index_in_master + i] in working_list:
             next_largest_index_in_master = lowest_prime_index_in_master + i
+            break
+    # print "after loop, i=", i
+    i -= 1
+    if i == 1:
+        working_list[i] = master_list[next_largest_index_in_master]
+    else:
+        working_list[i] = master_list[next_largest_index_in_master]
+        remaining_space = len(working_list) - i
+        working_list[:i] = master_list[:i]
+
+    return working_list
+
 
 
 # iterates the working list of primes to the next version
@@ -70,7 +84,7 @@ def iterate_primes_in_list(primelist,testflag):
 
         return primelist
     else:
-        if not (2 in primelist :
+        if not (2 in primelist):
             if testflag:
                 print "reverse increment"
             for i in xrange(len(primelist)):
@@ -104,22 +118,27 @@ master_list = []
 for i in get_primes(10000):
     #print i 
     master_list.append(i)
+master_list.remove(2)
+master_list.remove(5)
 seedlist = master_list[:listlength]
 print seedlist
-
+# print master_list.index(673)
 a = [3,7,109,673]
 workinglist = seedlist[:]
 for i in xrange(100):
-    print "STEP =", i, "workinglist: ", workinglist
-    if workinglist[-1] == 673:
-        print workinglist
+    # print "STEP =", i, "workinglist: ", workinglist
 
     #print workinglist
     if check_primeness_by_concatenation(workinglist):
         print "SUCCESS"
         break
     else:
-        workinglist = iterate_primes_in_list(workinglist,False)
+        workinglist = alt_iterate_primes_in_list(workinglist)
 
 print workinglist
+print sum(workinglist)
+# SUCCESS
+# [3, 7, 109, 673]
+# [Finished in 136.8s]
 
+# same answer in 118 seconds without 2 or 5 in the list
