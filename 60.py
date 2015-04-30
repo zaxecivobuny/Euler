@@ -1,8 +1,5 @@
 from useful import checkprime, get_primes
 
-prime_list = []
-test_group = []
-
 def is_prime(n):
     return checkprime(n)
 
@@ -12,10 +9,8 @@ def is_prime(n):
 def check_concats_for_prime(a,b):
     return is_prime(int(str(a) + str(b))) and is_prime(int(str(b) + str(a)))
 
-
 # takes a list of ints, recursively checks pairs for primality
 def check_primeness_by_concatenation(numlist):
-
     if len(numlist) == 2:
         return check_concats_for_prime(numlist[0],numlist[1])
     elif len(numlist) > 2:
@@ -24,9 +19,12 @@ def check_primeness_by_concatenation(numlist):
                 return False
         if not check_primeness_by_concatenation(numlist[1:]):
             return False
-
-
     return True
+
+# takes a list of ints, returns false (TRUE?) if any pair inside is already in the fail list
+def check_if_primes_already_failed(working_list):
+    print "go"
+
 
 # this function iterates the working list of primes to the next smallest group of size N 
 # first, it finds the lowest prime in the working list. call that A
@@ -34,19 +32,13 @@ def check_primeness_by_concatenation(numlist):
 # if the space between the two in master is one, we replace A with B
 # if the space is greater than two, we find the highest prime in working list that is less than B, call that C
 #   then we replace C with B, and backfill all lower positions in working list with the smallest primes in order until working list is filled up to the location of C
-
 def alt_iterate_primes_in_list(working_list):
-    # print "let's do this"
     global master_list
-    lowest_prime_index_in_master = master_list.index(working_list[0])
-    # print "lowest_prime_index_in_master", lowest_prime_index_in_master
-    
+    lowest_prime_index_in_master = master_list.index(working_list[0])    
     for i in xrange(1,len(working_list)+1):
-        # print "master_list[lowest_prime_index_in_master + i]", master_list[lowest_prime_index_in_master + i]
         if not master_list[lowest_prime_index_in_master + i] in working_list:
             next_largest_index_in_master = lowest_prime_index_in_master + i
             break
-    # print "after loop, i=", i
     i -= 1
     if i == 1:
         working_list[i] = master_list[next_largest_index_in_master]
@@ -57,78 +49,18 @@ def alt_iterate_primes_in_list(working_list):
 
     return working_list
 
-
-
-# iterates the working list of primes to the next version
-# there are three cases for this:
-#   in the first, the four primes in the primelist are adjacent (no holes)
-#       in this case, we increment the last position and start the remaining positions at the smallest list of primes to fill the space
-#   in the second case, a hole exists
-def iterate_primes_in_list(primelist,testflag):
-    global master_list
-    if testflag:
-        print "primelist", primelist
-    
-
-    master_list_index_of_top = master_list.index(primelist[-1])
-    primesetlength = master_list_index_of_top + 1
-    spaces = primesetlength - len(primelist)
-    master_list_index_of_bottom = master_list.index(primelist[0])
-    
-    if master_list[spaces] == primelist[0]:
-        if testflag:
-            print "INCREMENTING"
-        primelist = master_list[:len(primelist)-1]
-        #print master_list_index_of_top
-        primelist.append(master_list[master_list_index_of_top+1])
-
-        return primelist
-    else:
-        if not (2 in primelist):
-            if testflag:
-                print "reverse increment"
-            for i in xrange(len(primelist)):
-                # print i
-                # print "primelist[-1 * (i + 1)]", primelist[-1 * (i + 1)]
-                # print "master_list[master_list_index_of_top - i]", master_list[master_list_index_of_top - i]
-                #print primelist
-                #print "primelist[-1 * (i + 1)]", primelist[-1 * (i + 1)]  
-                if not primelist[-1 * (i + 1)] == master_list[master_list_index_of_top - i]:
-                    primelist[-1 * (i + 1)] = master_list[master_list_index_of_top - i]
-                    primelist[:(len(primelist)-i-1)] = master_list[:(len(primelist)-i-1)]
-                    return primelist
-
-        lastprime = 2
-        if testflag:
-            print "forward increment"
-        
-            print "master_list", master_list[master_list_index_of_bottom:master_list_index_of_top]
-        for prime in master_list[master_list_index_of_bottom:]:
-            #print "prime is", prime
-            if not prime in primelist:
-                primelist[primelist.index(lastprime)] = prime
-                return primelist
-            else:
-                lastprime = prime
-
-
-
-listlength = 4
+listlength = 5
 master_list = []
 for i in get_primes(10000):
-    #print i 
     master_list.append(i)
+
 master_list.remove(2)
 master_list.remove(5)
 seedlist = master_list[:listlength]
 print seedlist
-# print master_list.index(673)
 a = [3,7,109,673]
 workinglist = seedlist[:]
-for i in xrange(100):
-    # print "STEP =", i, "workinglist: ", workinglist
-
-    #print workinglist
+while True:
     if check_primeness_by_concatenation(workinglist):
         print "SUCCESS"
         break
@@ -142,3 +74,9 @@ print sum(workinglist)
 # [Finished in 136.8s]
 
 # same answer in 118 seconds without 2 or 5 in the list
+
+
+# b = set({1,2})
+# c = set({3,4})
+
+# print c
