@@ -60,15 +60,29 @@ seedlist = master_list[:listlength]
 print seedlist
 a = [3,7,109,673]
 workinglist = seedlist[:]
+
+# cheatyface
+index = master_list.index(a[listlength-2])
+workinglist = a[:listlength-1]
+workinglist.append(master_list[index+1])
+# /cheatyface
+
+print workinglist
+
 while True:
     if check_primeness_by_concatenation(workinglist):
         print "SUCCESS"
         break
     else:
-        workinglist = alt_iterate_primes_in_list(workinglist)
+        # workinglist = alt_iterate_primes_in_list(workinglist)
+        index += 1
+        workinglist[-1] = master_list[index]
+
 
 print workinglist
 print sum(workinglist)
+
+
 # SUCCESS
 # [3, 7, 109, 673]
 # [Finished in 136.8s]
@@ -80,3 +94,5 @@ print sum(workinglist)
 # c = set({3,4})
 
 # print c
+
+# ran on 5 for 24 hours, no result.

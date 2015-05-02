@@ -96,3 +96,4 @@ class Fraction:
         self.numerator = num
         self.denominator = denom
         return self
+        
