@@ -28,14 +28,8 @@ def get_prime_subset(pairing_prime, prime_set):
     prime_list_of_lists = []
     for i,p in enumerate(prime_subset):
         for j in get_prime_subset(p,prime_subset):
-            if j is int:
+                prime_list_of_lists.append([[pairing_prime] + j])
 
-                prime_list_of_lists.append([pairing_prime] + [j])
-            elif j is list:
-                prime_list_of_lists.append([pairing_prime] + j)
-            else:
-                print "pairing_prime", pairing_prime, "j", j
-                print 
     # for index, prime_from_subset in enumerate(prime_subset):
     #     get_prime_subset(pairing_prime_list + [prime_from_subset], prime_subset[index:])
     print "prime_list_of_lists", prime_list_of_lists
